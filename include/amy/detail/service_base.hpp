@@ -1,12 +1,12 @@
 #ifndef __AMY_DETAIL_SERVICE_BASE_HPP__
 #define __AMY_DETAIL_SERVICE_BASE_HPP__
 
-#include <boost/asio/io_service.hpp>
+#include <asio/io_service.hpp>
 
 namespace amy {
 namespace detail {
 
-using boost::asio::detail::service_base;
+using asio::detail::service_base;
 
 } // namespace detail
 } // namespace amy

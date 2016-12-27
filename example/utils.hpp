@@ -3,8 +3,9 @@
 
 #include <amy/auth_info.hpp>
 
-#include <boost/asio/ip/tcp.hpp>
 #include <boost/optional.hpp>
+
+#include <asio/ip/tcp.hpp>
 
 /// Global options.
 struct global_options {
@@ -23,7 +24,7 @@ struct global_options {
     /// Default schema to use.
     std::string schema;
 
-    boost::asio::ip::tcp::endpoint tcp_endpoint() const;
+    asio::ip::tcp::endpoint tcp_endpoint() const;
 
     amy::auth_info auth_info() const;
 
@@ -35,7 +36,7 @@ void parse_command_line_options(int argc, char* argv[]);
 
 std::string read_from_stdin();
 
-void check_error(boost::system::error_code const& ec);
+void check_error(std::error_code const& ec);
 
 #endif // __AMY_EXAMPLE_UTILS_HPP__
 

@@ -1,12 +1,12 @@
 #ifndef __AMY_DETAIL_ENDPOINT_TRAITS_HPP__
 #define __AMY_DETAIL_ENDPOINT_TRAITS_HPP__
 
-#include <boost/asio/ip/tcp.hpp>
-#include <boost/asio/local/stream_protocol.hpp>
+#include <asio/ip/tcp.hpp>
+#include <asio/local/stream_protocol.hpp>
 
 namespace amy {
 
-using namespace boost::asio;
+using namespace asio;
 
 template<typename Endpoint>
 class endpoint_traits;
@@ -59,7 +59,7 @@ private:
 
 }; // struct endpoint_traits<ip::tcp::endpoint>
 
-#if defined(BOOST_ASIO_HAS_LOCAL_SOCKETS)
+#if defined(ASIO_HAS_LOCAL_SOCKETS)
 
 template<>
 class endpoint_traits<local::stream_protocol::endpoint> {
@@ -85,7 +85,7 @@ private:
 
 }; // endpoint_traits<local::stream_protocol::endpoint>
 
-#endif // if defined(BOOST_ASIO_HAS_LOCAL_SOCKETS)
+#endif // if defined(ASIO_HAS_LOCAL_SOCKETS)
 
 } // namespace amy
 

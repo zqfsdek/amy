@@ -3,16 +3,16 @@
 #include <amy/connector.hpp>
 #include <amy/placeholders.hpp>
 
-#include <boost/asio/io_service.hpp>
 #include <boost/bind.hpp>
 #include <boost/format.hpp>
-#include <boost/system/system_error.hpp>
 
+#include <asio/io_service.hpp>
 #include <iostream>
+#include <system_error>
 
 global_options opts;
 
-void handle_store_result(boost::system::error_code const& ec,
+void handle_store_result(std::error_code const& ec,
                          amy::result_set rs,
                          amy::connector& connector)
 {
@@ -36,9 +36,7 @@ void handle_store_result(boost::system::error_code const& ec,
     }
 }
 
-void handle_query(boost::system::error_code const& ec,
-                  amy::connector& connector)
-{
+void handle_query(std::error_code const& ec, amy::connector& connector) {
     check_error(ec);
 
     connector.async_store_result(
@@ -48,9 +46,7 @@ void handle_query(boost::system::error_code const& ec,
                         boost::ref(connector)));
 }
 
-void handle_connect(boost::system::error_code const& ec,
-                    amy::connector& connector)
-{
+void handle_connect(std::error_code const& ec, amy::connector& connector) {
     check_error(ec);
 
     auto statement =
@@ -67,7 +63,7 @@ void handle_connect(boost::system::error_code const& ec,
 int main(int argc, char* argv[]) try {
     parse_command_line_options(argc, argv);
 
-    boost::asio::io_service io_service;
+    asio::io_service io_service;
     amy::connector connector(io_service);
 
     connector.async_connect(opts.tcp_endpoint(),
@@ -81,7 +77,7 @@ int main(int argc, char* argv[]) try {
     io_service.run();
 
     return 0;
-} catch (boost::system::system_error const& e) {
+} catch (std::system_error const& e) {
     std::cerr
         << boost::format("System error: %1%: %2%")
            % e.code().value() % e.what()

@@ -4,10 +4,10 @@
 #include <amy/detail/mysql.hpp>
 #include <amy/error.hpp>
 
-#include <boost/system/system_error.hpp>
 #include <boost/throw_exception.hpp>
 
 #include <memory>
+#include <system_error>
 
 namespace amy {
 namespace detail {
@@ -31,9 +31,9 @@ private:
             static std::shared_ptr<do_init> init(new do_init());
 
             if (0 != init->result()) {
-                boost::system::system_error e(init->result(),
-                                              boost::system::system_category(),
-                                              "mysql_library_init()");
+                std::system_error e(init->result(),
+                                    std::system_category(),
+                                    "mysql_library_init()");
                 boost::throw_exception(e);
             }
 

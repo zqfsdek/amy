@@ -3,7 +3,7 @@
 
 #include <amy/basic_connector.hpp>
 
-#include <boost/system/error_code.hpp>
+#include <system_error>
 
 namespace amy {
 namespace detail {
@@ -22,7 +22,7 @@ public:
         handler(handler)
     {}
 
-    void operator()(boost::system::error_code const& ec) {
+    void operator()(std::error_code const& ec) {
         handler(ec, !!ec ? connector.affected_rows() : 0u);
     }
 

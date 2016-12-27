@@ -1,7 +1,7 @@
 #ifndef __AMY_PLACEHOLDERS_HPP__
 #define __AMY_PLACEHOLDERS_HPP__
 
-#include <boost/asio/placeholders.hpp>
+#include <asio/placeholders.hpp>
 
 namespace amy {
 namespace placeholders {

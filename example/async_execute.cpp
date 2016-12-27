@@ -4,16 +4,16 @@
 #include <amy/execute.hpp>
 #include <amy/placeholders.hpp>
 
-#include <boost/asio/io_service.hpp>
 #include <boost/bind.hpp>
 #include <boost/format.hpp>
-#include <boost/system/system_error.hpp>
 
+#include <asio/io_service.hpp>
 #include <iostream>
+#include <system_error>
 
 global_options opts;
 
-void handle_execute(boost::system::error_code const& ec,
+void handle_execute(std::error_code const& ec,
                     uint64_t affected_rows,
                     amy::connector& connector)
 {
@@ -22,9 +22,7 @@ void handle_execute(boost::system::error_code const& ec,
     return;
 }
 
-void handle_connect(boost::system::error_code const& ec,
-                    amy::connector& connector)
-{
+void handle_connect(std::error_code const& ec, amy::connector& connector) {
     check_error(ec);
 
     // Executes an arbitrary SQL statement read from stdin.
@@ -39,7 +37,7 @@ void handle_connect(boost::system::error_code const& ec,
 int main(int argc, char* argv[]) {
     parse_command_line_options(argc, argv);
 
-    boost::asio::io_service io_service;
+    asio::io_service io_service;
     amy::connector connector(io_service);
 
     connector.async_connect(opts.tcp_endpoint(),

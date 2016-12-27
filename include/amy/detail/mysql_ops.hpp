@@ -26,22 +26,21 @@ using ::mysql_real_escape_string;
 using ::mysql_row_seek;
 using ::mysql_row_tell;
 
-inline void clear_error(boost::system::error_code& ec) {
+inline void clear_error(std::error_code& ec) {
     errno = 0;
-    ec = boost::system::error_code();
+    ec = std::error_code();
 }
 
 template<typename ReturnType>
 ReturnType error_wrapper(ReturnType return_value,
                          mysql_handle m,
-                         boost::system::error_code& ec)
+                         std::error_code& ec)
 {
-    ec = boost::system::error_code(::mysql_errno(m),
-                                   amy::error::get_client_category());
+    ec = std::error_code(::mysql_errno(m), amy::error::get_client_category());
     return return_value;
 }
 
-inline mysql_handle mysql_init(mysql_handle m, boost::system::error_code& ec) {
+inline mysql_handle mysql_init(mysql_handle m, std::error_code& ec) {
     clear_error(ec);
     mysql_handle ret = ::mysql_init(m);
 
@@ -54,10 +53,7 @@ inline mysql_handle mysql_init(mysql_handle m, boost::system::error_code& ec) {
     return ret;
 }
 
-inline void mysql_autocommit(mysql_handle m,
-                             bool mode,
-                             boost::system::error_code& ec)
-{
+inline void mysql_autocommit(mysql_handle m, bool mode, std::error_code& ec) {
     clear_error(ec);
     if (::mysql_autocommit(m, mode ? 1 : 0)) {
         ec = amy::error::autocommit_setting_error;
@@ -72,7 +68,7 @@ inline mysql_handle mysql_real_connect(mysql_handle m,
                                        unsigned int port,
                                        char const* unix_socket,
                                        unsigned long client_flag,
-                                       boost::system::error_code& ec)
+                                       std::error_code& ec)
 {
     clear_error(ec);
     mysql_handle h = ::mysql_real_connect(m, host, user, password, database,
@@ -83,7 +79,7 @@ inline mysql_handle mysql_real_connect(mysql_handle m,
 inline int32_t mysql_real_query(mysql_handle m,
                                 char const* stmt_str,
                                 unsigned long length,
-                                boost::system::error_code& ec)
+                                std::error_code& ec)
 {
     clear_error(ec);
     return error_wrapper(::mysql_real_query(m, stmt_str, length), m, ec);
@@ -95,7 +91,7 @@ inline uint32_t mysql_field_count(const mysql_handle m) {
 }
 
 inline result_set_handle mysql_store_result(mysql_handle m,
-                                            boost::system::error_code& ec)
+                                            std::error_code& ec)
 {
     clear_error(ec);
     return error_wrapper(::mysql_store_result(m), m, ec);
@@ -106,22 +102,20 @@ inline bool mysql_more_results(mysql_handle m) {
     return !!::mysql_more_results(m);
 }
 
-inline int mysql_next_result(mysql_handle m, boost::system::error_code& ec) {
+inline int mysql_next_result(mysql_handle m, std::error_code& ec) {
     clear_error(ec);
     return error_wrapper(::mysql_next_result(m), m, ec);
 }
 
 inline row_type mysql_fetch_row(detail::mysql_handle m,
                                 result_set_handle r,
-                                boost::system::error_code& ec)
+                                std::error_code& ec)
 {
     clear_error(ec);
     return error_wrapper(::mysql_fetch_row(r), m, ec);
 }
 
-inline void mysql_commit(detail::mysql_handle m,
-                         boost::system::error_code& ec)
-{
+inline void mysql_commit(detail::mysql_handle m, std::error_code& ec) {
     clear_error(ec);
     if (::mysql_commit(m)) {
         ec = amy::error::commit_error;
@@ -129,7 +123,7 @@ inline void mysql_commit(detail::mysql_handle m,
 }
 
 inline void mysql_rollback(detail::mysql_handle m,
-                           boost::system::error_code& ec)
+                           std::error_code& ec)
 {
     clear_error(ec);
     if (::mysql_rollback(m)) {
@@ -140,7 +134,7 @@ inline void mysql_rollback(detail::mysql_handle m,
 inline void mysql_options(detail::mysql_handle m,
                           int option,
                           char const* arg,
-                          boost::system::error_code& ec)
+                          std::error_code& ec)
 {
     clear_error(ec);
     error_wrapper(::mysql_options(m, (enum mysql_option)option, arg), m, ec);

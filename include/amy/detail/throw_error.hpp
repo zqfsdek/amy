@@ -5,15 +5,14 @@
 #include <amy/error.hpp>
 #include <amy/system_error.hpp>
 
-#include <boost/system/system_error.hpp>
 #include <boost/throw_exception.hpp>
+
+#include <system_error>
 
 namespace amy {
 namespace detail {
 
-inline void throw_error(boost::system::error_code const& ec,
-                        detail::mysql_handle m)
-{
+inline void throw_error(std::error_code const& ec, detail::mysql_handle m) {
     if (ec) {
         if (ec.category() == amy::error::get_client_category()) {
             amy::system_error e(ec, ::mysql_error(m));

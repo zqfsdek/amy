@@ -4,7 +4,8 @@
 #include <amy/basic_connector.hpp>
 
 #include <boost/noncopyable.hpp>
-#include <boost/system/error_code.hpp>
+
+#include <system_error>
 
 namespace amy {
 
@@ -25,7 +26,7 @@ public:
         committed_ = true;
     }
 
-    boost::system::error_code commit(boost::system::error_code& ec) {
+    std::error_code commit(std::error_code& ec) {
         committed_ = !!connector_.commit(ec);
         return ec;
     }
@@ -34,13 +35,13 @@ public:
         connector_.rollback();
     }
 
-    boost::system::error_code rollback(boost::system::error_code& ec) {
+    std::error_code rollback(std::error_code& ec) {
         return connector_.rollback(ec);
     }
 
     ~basic_scoped_transaction() {
         if (!committed_) {
-            boost::system::error_code ec;
+            std::error_code ec;
             connector_.rollback(ec);
         }
         connector_.autocommit(true);
